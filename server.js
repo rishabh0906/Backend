@@ -34,7 +34,7 @@ authRouter.route("/newpwd").post(ForgotPwdEmail);
 
 function ForgetPage(req,res){
   
-  res.sendFile("public/forget.html",{root:__dirname});
+  res.sendFile("public",{root:__dirname});
 }
 
 function ForgotPwdEmail(req, res) {

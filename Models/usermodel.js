@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
-const password = "4XfeGGJF5rA5jLGC";
-const user = "rishabh_0906";
+const { db_link } = require("../config");
 
 const validator = require("email-validator");
 
 mongoose
-  .connect(
-    `mongodb+srv://${user}:${password}@cluster0.nzlxu.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
-  )
+  .connect(db_link)
   .then((db) => {
     console.log(db);
   })
@@ -23,7 +20,7 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique:true,
+    unique: true,
     validate: function () {
       return validator.validate(this.email);
     },
@@ -32,6 +29,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     min: 8,
+  },
+
+  createdAt: {
+    type: String,
   },
   confirmPwd: {
     type: String,
@@ -43,18 +44,24 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+userSchema.pre("save", function () {
+  return (this.confirmPwd = undefined);
+});
+
 const userModel = mongoose.model("userModel", userSchema);
 
-(async function create() {
-  let user = {
-    name: "Rishabh",
-    age: "20",
-    email: "ac@gmail.com",
-    pwd: "12345678",
-    confirmPwd: "12345678",
-  };
+module.exports = userModel;
 
-  let userdata = await userModel.create(user);
+// (async function create() {
+//   let user = {
+//     name: "Rishabh",
+//     age: "20",
+//     email: "ac@gmail.com",
+//     pwd: "12345678",
+//     confirmPwd: "12345678",
+//   };
 
-  console.log(userdata);
-})();
+//   let userdata = await userModel.create(user);
+
+//   console.log(userdata);
+// })();
