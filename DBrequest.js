@@ -1,18 +1,23 @@
 const express = require("express");
 let app = express();
 
-const port = 5000;
+const port = 4545;
 app.listen(port, () => {
-  console.log("Server Listening at 5000");
+  console.log(`Server Listening at ${port}`);
 });
 
-app.use(express.static("public", { root: __dirname }));
+// app.use(express.static("public", { root: __dirname }));
 
 app.use(express.json());
 
+app.get("/test",(req,res)=>{
+
+    res.send("Got It !");
+})
+
 const authRouter = express.Router();
 
-app.route("/auth", authRouter);
+app.use("/auth", authRouter);
 
 authRouter.route("/signup").post(setCreatedAt, signupUser);
 
@@ -28,7 +33,7 @@ function setCreatedAt(req, res, next) {
   req.body.createdAt = new Date().toISOString();
   next();
 }
-const {userModel} = require("./models/userModel");
+const userModel = require("./Models/usermodel");
 async function signupUser(req, res) {
   // let userDetails=req.body;
   // let name=userDetails.name;

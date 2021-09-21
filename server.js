@@ -1,29 +1,20 @@
 const express = require("express");
+const CookieParser=require("cookie-parser");
 const app = express();
 const path=require("path")
-
-const userRouter = express.Router();
+const userRouter = require("./Routes/userRouters");
 const authRouter = express.Router();
 app.listen("5000", function () {
   console.log("server listening on port 5000");
 });
 
-app.use((req, res, next) => {
-  console.log("middleware1");
-  next();
-});
+app.use(CookieParser());
 app.use(express.json());
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
 app.use(express.static(path.join("public/forget.html",__dirname)));
 
 //mounting in express
-userRouter
-  .route("/")
-  .get(getUser)
-  .post(createUser)
-  .patch(updateUser)
-  .delete(deleteUser);
 
 
 authRouter.route("/signup").post(signupUser);
@@ -46,7 +37,6 @@ app.get("/user-all", (req, res) => {
   res.redirect("/user");
 });
 
-userRouter.route("/:id").get(getUserById);
 // 404 page   -- Page Not Found
 app.use((req, res) => {
   res.sendFile("public/404.html", { root: __dirname });
@@ -71,43 +61,23 @@ let user = {};
 //   res.send("Home Page");
 // });
 
-app.get("/user", getUser);
+// app.get("/user", getUser);
 
-function getUser(req, res) {
-  res.json(user);
-}
+
 
 //post request
 // client-> server
 //create
-app.post("/user", createUser);
+// app.post("/user", createUser);
 
-function createUser(req, res) {
-  user = req.body;
-  // console.log(req.body);
-  res.send("data has been added succesfully");
-}
+
 //update
-app.patch("/user", updateUser);
+// app.patch("/user", updateUser);
 
-function updateUser(req, res) {
-  let obj = req.body;
-  for (let key in obj) {
-    user[key] = obj[key];
-  }
-  res.json(user);
-}
+
 //delete
-app.delete("/user", deleteUser);
+// app.delete("/user", deleteUser);
 
-function deleteUser(req, res) {
-  user = {};
-  res.json(user);
-  // res.send('ussr has been deleted');
-}
+
 //param route
-app.get("/user/:id");
-function getUserById(req, res) {
-  console.log(req.params);
-  res.json(req.params.id);
-}
+// app.get("/user/:id");

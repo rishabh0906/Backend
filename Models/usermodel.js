@@ -6,7 +6,6 @@ const validator = require("email-validator");
 mongoose
   .connect(db_link)
   .then((db) => {
-    console.log(db);
   })
   .catch((err) => {
     console.log(err);
