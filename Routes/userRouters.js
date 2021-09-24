@@ -1,15 +1,14 @@
 const express = require("express");
 const userModel = require("../Models/usermodel");
 const userRouter = express.Router();
-
+const protectRoute = require("../Routes/protectRoute");
 
 userRouter
   .route("/")
-  .get(getUser)
+  .get(protectRoute, getUser)
   .post(createUser)
   .patch(updateUser)
   .delete(deleteUser);
-
 
 userRouter.route("/:id").get(getUserById);
 function getUserById(req, res) {

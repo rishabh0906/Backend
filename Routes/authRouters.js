@@ -2,6 +2,9 @@ const express=require('express');
 const userRouter=express.Router();
 const userModel=require('../Models/usermodel');
 const authRouter=express.Router();
+const jwt=require("jsonwebtoken");
+const {JWT_Key}=require("../config");
+const sendMail= require("../nodemailer");
 //----------routes-----------
 authRouter
 .route('/signup')
@@ -36,6 +39,7 @@ async function signupUser(req,res){
     // let password=userDetails.password;
     try{
         let userObj=req.body;
+        sendMail(userObj);
         // user.push({email,name,password});
         //put all data in mongo db
         // create document in userModel
@@ -86,7 +90,9 @@ async function loginUser(req,res){
             let user= await userModel.findOne({email:req.body.email});
             if(user){
                 if(req.body.password==user.password){
-                    res.cookie('login','1234',{httpOnly:true});
+                    let payload=user["_id"];
+                    let token=jwt.sign({id:payload},JWT_Key);
+                    res.cookie('login',token,{httpOnly:true});
                     return res.json({
                         message:"user loged in"
                     });
