@@ -18,7 +18,7 @@ const {AdminPassword,AdminId,SecondPersonId}=require("./config");
     let mail={
         from:`Test App <${AdminId}>`,
         to:SecondPersonId,
-        Subject:"Welcome Note",
+        subject:"Welcome Note",
         text:`We are glad!!${user.name}  Hope you bought pizza`,
         html:`<h1> Hola!! </h1>`
     }
@@ -26,7 +26,7 @@ const {AdminPassword,AdminId,SecondPersonId}=require("./config");
     try{
 
         let res=await transport.sendMail(mail);
-        console.log("response:"+res);
+        console.log("response:"+res.envelope.from);
 
     }
     catch(err){

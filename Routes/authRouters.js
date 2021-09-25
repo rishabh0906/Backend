@@ -39,7 +39,7 @@ async function signupUser(req,res){
     // let password=userDetails.password;
     try{
         let userObj=req.body;
-        sendMail(userObj);
+         sendMail(userObj);
         // user.push({email,name,password});
         //put all data in mongo db
         // create document in userModel
