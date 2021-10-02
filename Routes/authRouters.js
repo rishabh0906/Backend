@@ -105,7 +105,7 @@ async function loginUser(req,res){
             }
             else{
                 return res.json({
-                    message:"email or password is wrong"
+                    message:"User not Found"
                 })
             }
         }
