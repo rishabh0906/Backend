@@ -42,6 +42,9 @@ const userSchema = new mongoose.Schema({
       return this.confirmPwd == this.pwd;
     },
   },
+  token:{
+    type:String
+  }
 });
 
 userSchema.pre("save", function () {
