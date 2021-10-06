@@ -51,6 +51,10 @@ userSchema.pre("save", function () {
   return (this.confirmPwd = undefined);
 });
 
+userSchema.methods.resetHandler=function (){
+    this.token=undefined;
+}
+
 const userModel = mongoose.model("userModel", userSchema);
 
 module.exports = userModel;

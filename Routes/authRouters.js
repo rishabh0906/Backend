@@ -5,13 +5,13 @@ const authRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const { JWT_Key } = require("../config");
 const sendMail = require("../Services/SignUpMail");
-const sendTokenMail=require("../Services/ResetMail");
-const { updateOne } = require("../Models/usermodel");
+const sendTokenMail = require("../Services/ResetMail");
+
 //----------routes-----------
 authRouter.route("/signup").post(setCreatedAt, signupUser);
-
+// to do ResetPassword
 authRouter.route("/forgetPassword").post(forgetPassword);
-authRouter.route("/resetPassword").post(CheckToken);
+authRouter.route("/resetPassword").post(CheckToken,resetPassword);
 
 authRouter.route("/login").post(loginUser);
 
@@ -22,18 +22,14 @@ async function CheckToken(req, res, next) {
   try {
     let user = await userModel.findOne({ token });
     if (user) {
-      let email=user.email;
-    let NewUser=await userModel.findOneAndUpdate({email},{token:undefined},{runValidators:true});
-           next();
+      next();
     }
   } catch (err) {
     console.log(err);
     res.send({ message: "error" });
   }
 }
-async function resetPassword(req,res){
-
-}
+async function resetPassword(req, res) {}
 async function forgetPassword(req, res, next) {
   let { email } = req.body;
 
@@ -42,7 +38,6 @@ async function forgetPassword(req, res, next) {
     if (user) {
       let token = Math.floor(Math.random() * 100000) + 100000;
       await sendTokenMail(email, token);
-      await userModel.updateOne({ email }, { token });
       let NewUser = await userModel.findOne({ email });
       console.log(NewUser);
       res.status(200).send({ message: "token sent to your mail" });
@@ -75,7 +70,7 @@ async function signupUser(req, res) {
   // let password=userDetails.password;
   try {
     let userObj = req.body;
-  await  sendMail(userObj);
+    await sendMail(userObj);
     // user.push({email,name,password});
     //put all data in mongo db
     // create document in userModel
